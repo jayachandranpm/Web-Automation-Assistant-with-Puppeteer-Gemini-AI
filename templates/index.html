@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Automation Assistant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-3xl font-bold mb-6 text-gray-800">Web Automation Assistant</h1>
+            
+            <form id="promptForm" class="mb-6">
+                <div class="mb-4">
+                    <label for="prompt" class="block text-sm font-medium text-gray-700 mb-2">
+                        What would you like the browser to do?
+                    </label>
+                    <textarea 
+                        id="prompt" 
+                        name="prompt" 
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Example: Go to Google, search for 'web automation', and take a screenshot of the results"
+                    ></textarea>
+                </div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    id="submitBtn"
+                >
+                    Generate & Run Script
+                </button>
+            </form>
+
+            <div id="loadingIndicator" class="hidden">
+                <div class="flex items-center justify-center space-x-2 text-gray-600">
+                    <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <span>Processing your request...</span>
+                </div>
+            </div>
+
+            <div id="resultContainer" class="hidden space-y-4">
+                <div class="border-t pt-4">
+                    <h2 class="text-xl font-semibold mb-2 text-gray-800">Generated Script</h2>
+                    <div id="codeEditor" class="border rounded-md"></div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h2 class="text-xl font-semibold mb-2 text-gray-800">Execution Output</h2>
+                    <pre id="output" class="bg-gray-100 p-4 rounded-md whitespace-pre-wrap"></pre>
+                </div>
+            </div>
+
+            <div id="errorContainer" class="hidden mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    
+    <script>
+        let editor;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize CodeMirror
+            editor = CodeMirror(document.getElementById('codeEditor'), {
+                mode: 'javascript',
+                theme: 'monokai',
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+        });
+
+        document.getElementById('promptForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const prompt = document.getElementById('prompt').value.trim();
+            if (!prompt) return;
+
+            // UI elements
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultContainer = document.getElementById('resultContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            const output = document.getElementById('output');
+
+            // Reset UI
+            submitBtn.disabled = true;
+            loadingIndicator.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+
+            try {
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt }),
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // Show results
+                    resultContainer.classList.remove('hidden');
+                    editor.setValue(result.code || '');
+                    output.textContent = result.message || 'Task completed successfully';
+                } else {
+                    // Show error
+                    errorContainer.classList.remove('hidden');
+                    errorContainer.textContent = result.message || 'An error occurred';
+                    if (result.code) {
+                        resultContainer.classList.remove('hidden');
+                        editor.setValue(result.code);
+                    }
+                }
+            } catch (error) {
+                errorContainer.classList.remove('hidden');
+                errorContainer.textContent = 'Failed to process request: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
