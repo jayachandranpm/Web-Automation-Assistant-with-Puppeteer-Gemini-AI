@@ -25,5 +25,5 @@ This project is a web-based automation tool that generates and executes Puppetee
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone [[https://github.com/your-username/web-automation-assistant](https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI)](https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI.git
+   git clone [(https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI)](https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI.git)
    cd web-automation-assistant```
