@@ -26,4 +26,5 @@ This project is a web-based automation tool that generates and executes Puppetee
 1. Clone the repository:
    ```bash
    git clone https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI.git
-   cd web-automation-assistant```
+   cd web-automation-assistant
+   ```
