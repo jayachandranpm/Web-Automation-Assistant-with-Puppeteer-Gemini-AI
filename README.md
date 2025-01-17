@@ -23,8 +23,26 @@ This project is a web-based automation tool that generates and executes Puppetee
 4. The user can view the generated script, execution logs, and output in the browser.
 
 ## Installation
-1. Clone the repository:
+Clone the repository:
    ```bash
    git clone https://github.com/jayachandranpm/Web-Automation-Assistant-with-Puppeteer-Gemini-AI.git
    cd web-automation-assistant
    ```
+## 1) Install dependencies:
+```bash
+pip install -r requirements.txt
+npm install puppeteer
+```
+## 2) Set up the Gemini API key:
+
+Create a .env file in the root directory and add your Gemini API key:
+```bash
+GEMINI_API_KEY=your_api_key_here
+```
+
+## 4) Run the Flask application:
+```bash
+python app.py
+```
+
+## 5) Open your browser and navigate to http://localhost:5000.
