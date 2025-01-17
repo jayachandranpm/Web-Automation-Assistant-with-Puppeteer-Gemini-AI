@@ -1,0 +1,21 @@
+{
+    "name": "ai-agent-puppeteer",
+    "version": "1.0.0",
+    "description": "AI Agent using Puppeteer for web automation",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "puppeteer",
+        "automation",
+        "ai",
+        "web-scraping"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "puppeteer": "^23.11.1"
+    }
+}
